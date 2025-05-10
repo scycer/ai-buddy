@@ -20,7 +20,7 @@ export interface NodeDefinition<I, O> {
   /** Schema for validating output */
   outputSchema: z.ZodType<O>;
   /** Function that executes the node's logic */
-  execute: (input: I) => O;
+  execute: (input: I) => O | Promise<O>;
 }
 
 /**
