@@ -1,54 +1,76 @@
-# React + TypeScript + Vite
+# Notes App with Convex and Clerk
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack notes application built with React, TypeScript, Convex, and Clerk Authentication.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- User authentication via Clerk
+- Create, read, update, and delete notes
+- Real-time updates using Convex
+- Responsive UI with Tailwind CSS
+- Soft delete functionality
 
-## Expanding the ESLint configuration
+## Prerequisites
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Node.js (v16 or newer)
+- npm or yarn
+- Convex account (https://convex.dev)
+- Clerk account (https://clerk.dev)
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Getting Started
+
+### Setup
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env` file in the root directory (copy from `.env.example`):
+   ```
+   # Convex
+   VITE_CONVEX_URL=your_convex_deployment_url
+   
+   # Clerk Authentication
+   VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+   ```
+
+4. Initialize Convex (if not already done):
+   ```bash
+   npx convex init
+   ```
+
+5. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+### Testing the API
+
+You can test the Convex API functions using the Convex dashboard or via curl commands. Here are some examples:
+
+#### List Notes (authenticated)
+```bash
+curl -X POST "YOUR_CONVEX_URL/list" \
+  -H "Content-Type: application/json" \
+  -d '{"showDeleted": false}' \
+  -H "Authorization: Bearer YOUR_AUTH_TOKEN"
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+#### Create a Note (authenticated)
+```bash
+curl -X POST "YOUR_CONVEX_URL/create" \
+  -H "Content-Type: application/json" \
+  -d '{"content": "Test note content"}' \
+  -H "Authorization: Bearer YOUR_AUTH_TOKEN"
 ```
+
+## Project Structure
+
+- `/src` - React frontend code
+  - `/components` - UI components
+- `/convex` - Backend API and schema
+  - `schema.ts` - Database schema
+  - `notes.ts` - Query and mutation functions
+  - `auth.ts` - Authentication utilities

@@ -1,0 +1,10 @@
+{
+  "project": "notes-app",
+  "team": "personal",
+  "prodUrl": "",
+  "functions": "convex",
+  "codegen": {
+    "path": "convex/_generated/api",
+    "apiUrl": "${CONVEX_SELF_HOSTED_URL}"
+  }
+}

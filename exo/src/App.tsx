@@ -1,34 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { ClerkProvider, SignIn, SignUp, SignedIn, SignedOut, useAuth } from '@clerk/clerk-react'
+import { ConvexReactClient } from 'convex/react'
+import { ConvexProviderWithClerk } from "convex/react-clerk";
+
+import NotesList from './components/NotesList'
+import NoteEditor from './components/NoteEditor'
+import Layout from './components/Layout'
+
+// Initialize Convex client
+const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string)
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string}>
+      <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+        <Router>
+          <SignedOut>
+            <Routes>
+              <Route path="/sign-in/*" element={<SignIn routing="path" path="/sign-in" />} />
+              <Route path="/sign-up/*" element={<SignUp routing="path" path="/sign-up" />} />
+              <Route path="*" element={<Navigate to="/sign-in" replace />} />
+            </Routes>
+          </SignedOut>
+          <SignedIn>
+            <Layout>
+              <Routes>
+                <Route path="/" element={<NotesList />} />
+                <Route path="/new" element={<NoteEditor />} />
+                <Route path="/edit/:id" element={<NoteEditor />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </Layout>
+          </SignedIn>
+        </Router>
+      </ConvexProviderWithClerk>
+    </ClerkProvider>
   )
 }
 
