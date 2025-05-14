@@ -1,5 +1,3 @@
-import { defineSchema, defineTable } from "convex/server";
-import { v } from "convex/values";
 import { ConvexError } from "convex/values";
 
 // Get the user ID from the auth context

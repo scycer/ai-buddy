@@ -4,9 +4,8 @@ import { ClerkProvider, SignIn, SignUp, SignedIn, SignedOut, useAuth } from '@cl
 import { ConvexReactClient } from 'convex/react'
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 
-import NotesList from './components/NotesList'
-import NoteEditor from './components/NoteEditor'
-import Layout from './components/Layout'
+import Layout from './Layout'
+import Chat from './components/Chat'
 
 // Initialize Convex client
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string)
@@ -26,9 +25,7 @@ function App() {
           <SignedIn>
             <Layout>
               <Routes>
-                <Route path="/" element={<NotesList />} />
-                <Route path="/new" element={<NoteEditor />} />
-                <Route path="/edit/:id" element={<NoteEditor />} />
+                <Route path="/" element={<Chat />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </Layout>
