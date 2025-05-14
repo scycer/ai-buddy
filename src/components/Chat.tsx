@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useQuery, useMutation } from "convex/react";
+import { useQuery, useMutation, useAction } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import type { Id } from "../../convex/_generated/dataModel";
 
@@ -14,7 +14,7 @@ const Chat: React.FC = () => {
   ) || [];
 
   const createThread = useMutation(api.threads.createThread);
-  const addMessage = useMutation(api.messages.addMessage);
+  const generateAIResponse = useAction(api.messages.generateAIResponse);
 
   const handleCreateThread = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +28,7 @@ const Chat: React.FC = () => {
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedThreadId && newMessage.trim()) {
-      await addMessage({
+      await generateAIResponse({
         threadId: selectedThreadId,
         content: newMessage,
       });
